@@ -1,5 +1,13 @@
-import antfu from '@antfu/eslint-config'
+import antfu from '@antfu/eslint-config';
 
 export default antfu({
-  formatters: true,
-})
+	type: 'app',
+	typescript: true,
+	formatters: true,
+	stylistic: {
+		braceStyle: '1tbs',
+		quotes: 'single',
+		indent: 'tab',
+		semi: true,
+	},
+});
