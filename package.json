@@ -1,21 +1,21 @@
 {
-  "name": "super-tic-tac-toe",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "12.3.4",
-      "onFail": "download"
-    }
-  },
-  "packageManager": "pnpm@12.3.4",
-  "type": "module",
-  "private": true,
-  "devDependencies": {
-    "@antfu/eslint-config": "^9.5.1",
-    "eslint": "^10.9.1",
-    "eslint-plugin-format": "^2.0.1"
-  }
+	"name": "super-tic-tac-toe",
+	"devEngines": {
+		"packageManager": {
+			"name": "pnpm",
+			"version": "12.3.4",
+			"onFail": "download"
+		}
+	},
+	"type": "module",
+	"private": true,
+	"packageManager": "pnpm@12.3.4",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"devDependencies": {
+		"@antfu/eslint-config": "^9.5.1",
+		"eslint": "^10.9.1",
+		"eslint-plugin-format": "^2.0.1"
+	}
 }
