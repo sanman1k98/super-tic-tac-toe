@@ -12,5 +12,10 @@
   },
   "packageManager": "pnpm@12.3.4",
   "type": "module",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@antfu/eslint-config": "^9.5.1",
+    "eslint": "^10.9.1",
+    "eslint-plugin-format": "^2.0.1"
+  }
 }
