@@ -76,6 +76,49 @@ export class TicTacToe {
 	#moves = new Uint8Array(this.#buf, 4, 9);
 
 	/**
+	 * Encoded a string representation of a player's move as an unsigned 8-bit integer.
+	 * @param {PlayerMove} str
+	 */
+	static encodeMove(str) {
+		if (typeof str !== 'string' || str.length !== 2)
+			throw new Error('Expected a string with two chars', { cause: { value: str } });
+
+		const [mark, position] = /** @type {[string, string]} */ (Array.from(str));
+		let encoded = Number.parseInt(position, 10);
+
+		if (Number.isNaN(encoded) || encoded < 1 || encoded > 9)
+			throw new RangeError('InvalidGridPosition: Expected integer between 1 and 9 inclusive', { cause: { position: encoded } });
+		if (mark === 'X')
+			encoded |= 0b1_0000;
+		else if (mark !== 'O')
+			throw new Error('InvalidPlayerMark: Expected either "X" or "O"', { cause: { mark } });
+
+		return encoded;
+	}
+
+	/**
+	 * Take an unsigned 8-bit integer and get back the player move that it represents.
+	 * @param {number} uint8
+	 * @returns {PlayerMove} The move decoded from the given data.
+	 */
+	static decodeMove(uint8) {
+		if (!Number.isInteger(uint8))
+			throw new TypeError('Expected an integer', { cause: { value: uint8 } });
+
+		const position = /** @type {GridPosition} */(uint8 & 0b0_1111);
+		if (position < 1 || position > 9)
+			throw new Error('InvalidGridPosition');
+
+		const mark = uint8 >> 4;
+		if (mark === 1)
+			return `X${position}`;
+		else if (mark === 0)
+			return `O${position}`;
+		else
+			throw new Error('InvalidPlayerMove');
+	}
+
+	/**
 	 * Get a bitmask for the specified positions on the grid.
 	 * @param {number[]} positions - Integers between 1 and 9 inclusive.
 	 */
