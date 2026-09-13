@@ -22,19 +22,46 @@
  */
 export class TicTacToe {
 	/**
+	 * Backing buffer used to store all data for this game.
+	 * @type {ArrayBuffer}
+	 */
+	#buf = new ArrayBuffer(2 + 2 + 9);
+
+	/**
+	 * Used to manipulate bytes within the array buffer.
+	 * @type {DataView}
+	 */
+	#view = new DataView(this.#buf);
+
+	/**
+	 * Bitset used to represent the current positions occupied by X.
+	 * @type {number}
+	 */
+	get #xMarks() {
+		return this.#view.getUint16(0);
+	}
+
+	/**
+	 * Bitset used to represent the current positions occupied by O.
+	 * @type {number}
+	 */
+	get #oMarks() {
+		return this.#view.getUint16(2);
+	}
+
+	set #xMarks(uint16) {
+		this.#view.setUint16(0, uint16);
+	}
+
+	set #oMarks(uint16) {
+		this.#view.setUint16(2, uint16);
+	}
+
+	/**
 	 * The moves played by the players serialized into bytes.
 	 * @type {Uint8Array}
 	 */
-	#moves = new Uint8Array(9);
-
-	/**
-	 * Bitfields representing the positions occupied by each player.
-	 * @type {{ x: number; o: number }}
-	 */
-	#marks = {
-		x: 0b000_000_000,
-		o: 0b000_000_000,
-	};
+	#moves = new Uint8Array(this.#buf, 4, 9);
 
 	/**
 	 * Get a bitmask for the specified positions on the grid.
@@ -117,7 +144,7 @@ export class TicTacToe {
 	 */
 	isTaken(position) {
 		const mask = TicTacToe.createMask(position);
-		return ((this.#marks.x | this.#marks.o) & mask) !== 0;
+		return ((this.#xMarks | this.#oMarks) & mask) !== 0;
 	}
 
 	/**
@@ -153,7 +180,7 @@ export class TicTacToe {
 	get finished() {
 		if (this.#moves.findLastIndex(Boolean) === this.#moves.length - 1)
 			return true;
-		else if (TicTacToe.getWinningMarks(this.#marks.x) || TicTacToe.getWinningMarks(this.#marks.o))
+		else if (TicTacToe.getWinningMarks(this.#xMarks) || TicTacToe.getWinningMarks(this.#oMarks))
 			return true;
 		return false;
 	}
@@ -175,10 +202,10 @@ export class TicTacToe {
 
 		if (player === 'x') {
 			this.#moves.set([position | 0b1_0000], idx);
-			this.#marks.x |= mask;
+			this.#xMarks |= mask;
 		} else if (player === 'o') {
 			this.#moves.set([position], idx);
-			this.#marks.o |= mask;
+			this.#oMarks |= mask;
 		} else {
 			throw new RangeError('Expected either "x" or "o"', { cause: { player } });
 		}
