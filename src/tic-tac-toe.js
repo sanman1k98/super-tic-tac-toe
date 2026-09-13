@@ -203,33 +203,10 @@ export class TicTacToe {
 	}
 
 	/**
-	 * @param {number} n
-	 */
-	static parseMoveData(n) {
-		if (!Number.isInteger(n))
-			throw new Error('InvalidMoveData: Expected an integer value', { cause: { data: n } });
-		const position = n & 0b0_1111;
-		if (position > 9 || position < 1)
-			throw new Error('InvalidMoveData');
-		const player = (n & 0b1_0000) === 1 ? 'x' : 'o';
-		return { player, position };
-	}
-
-	/**
-	 * @typedef {object} MoveInfo
-	 * @property {'x' | 'o'} player Either X or O.
-	 * @property {number} position The position on the grid.
-	 */
-
-	/**
-	 * @type {MoveInfo[]}
+	 * @type {PlayerMove[]}
 	 */
 	get moves() {
-		return Array.from(this.#moves.filter(Boolean), (data) => {
-			const player = (data & 0b1_0000) === 1 ? 'x' : 'o';
-			const position = data & 0b0_1111;
-			return { player, position };
-		});
+		return Array.from(this.#moves.filter(Boolean), TicTacToe.decodeMove);
 	}
 
 	get finished() {
@@ -241,28 +218,28 @@ export class TicTacToe {
 	}
 
 	/**
-	 * @param {object} opts
-	 * @param {'x' | 'o'} opts.player
-	 * @param {number} opts.position
+	 * @param {PlayerMove} move
 	 */
-	play({ player, position }) {
+	play(move) {
 		const idx = this.#moves.findLastIndex(Boolean) + 1;
-
 		if (idx >= this.#moves.length)
 			throw new Error('Unexpected game state');
+
+		const byte = TicTacToe.encodeMove(move);
+		const position = byte & 0x0F;
+		const mark = byte >> 4;
+
 		if (this.isTaken(position))
 			throw new Error('Position is already taken');
 
 		const mask = TicTacToe.createMask(position);
 
-		if (player === 'x') {
-			this.#moves.set([position | 0b1_0000], idx);
+		if (mark === 1) {
+			this.#moves.set([byte], idx);
 			this.#xMarks |= mask;
-		} else if (player === 'o') {
-			this.#moves.set([position], idx);
+		} else if (mark === 0) {
+			this.#moves.set([byte], idx);
 			this.#oMarks |= mask;
-		} else {
-			throw new RangeError('Expected either "x" or "o"', { cause: { player } });
 		}
 	}
 }
