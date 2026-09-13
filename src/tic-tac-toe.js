@@ -1,4 +1,16 @@
 /**
+ * @typedef { 'X' | 'O' } PlayerMark
+ */
+
+/**
+ * @typedef { 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 } GridPosition
+ */
+
+/**
+ * @typedef { `${PlayerMark}${GridPosition}` } PlayerMove
+ */
+
+/**
  * Contains the moves played by both players.
  *
  * The game grid will be represented with positions corresponding to the
