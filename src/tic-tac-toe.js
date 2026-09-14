@@ -146,7 +146,7 @@ export class TicTacToe {
 	 * @param {GridPosition[]} positions - Integers between 1 and 9 inclusive.
 	 * @returns {number} A bitmask with the specified bits turned on.
 	 */
-	static createMask(...positions) {
+	static createGridMask(...positions) {
 		let m = 0;
 		for (const pos of positions) {
 			switch (pos) {
@@ -185,28 +185,28 @@ export class TicTacToe {
 	}
 
 	static TOP_ROW_MASK
-		= this.createMask(1, 2, 3);
+		= this.createGridMask(1, 2, 3);
 
 	static MIDDLE_ROW_MASK
-		= this.createMask(4, 5, 6);
+		= this.createGridMask(4, 5, 6);
 
 	static BOTTOM_ROW_MASK
-		= this.createMask(7, 8, 9);
+		= this.createGridMask(7, 8, 9);
 
 	static LEFT_COL_MASK
-		= this.createMask(1, 4, 7);
+		= this.createGridMask(1, 4, 7);
 
 	static CENTER_COL_MASK
-		= this.createMask(2, 5, 8);
+		= this.createGridMask(2, 5, 8);
 
 	static RIGHT_COL_MASK
-		= this.createMask(3, 6, 9);
+		= this.createGridMask(3, 6, 9);
 
 	static DIAG_1_MASK
-		= this.createMask(1, 5, 9);
+		= this.createGridMask(1, 5, 9);
 
 	static DIAG_2_MASK
-		= this.createMask(3, 5, 7);
+		= this.createGridMask(3, 5, 7);
 
 	/**
 	 * @param {number} marks - A player's marks represented by a bitfield.
@@ -237,7 +237,7 @@ export class TicTacToe {
 	 * @param {GridPosition} position - Integer between 1 and 9 inclusive.
 	 */
 	isTaken(position) {
-		const mask = TicTacToe.createMask(position);
+		const mask = TicTacToe.createGridMask(position);
 		return ((this.#xMarks | this.#oMarks) & mask) !== 0;
 	}
 
@@ -271,7 +271,7 @@ export class TicTacToe {
 		if (this.isTaken(position))
 			throw new Error('Position is already taken');
 
-		const mask = TicTacToe.createMask(position);
+		const mask = TicTacToe.createGridMask(position);
 
 		if (mark === 1) {
 			this.#moves.set([byte], idx);

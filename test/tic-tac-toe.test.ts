@@ -6,19 +6,19 @@ import { TicTacToe } from '../src/tic-tac-toe.js';
 
 describe('Grid positions', () => {
 	it('Creates bitmasks for specified positions', () => {
-		assert.equal(TicTacToe.createMask(1), 0b000_000_001);
-		assert.equal(TicTacToe.createMask(2), 0b000_000_010);
-		assert.equal(TicTacToe.createMask(3), 0b000_000_100);
-		assert.equal(TicTacToe.createMask(4), 0b000_001_000);
-		assert.equal(TicTacToe.createMask(5), 0b000_010_000);
-		assert.equal(TicTacToe.createMask(6), 0b000_100_000);
-		assert.equal(TicTacToe.createMask(7), 0b001_000_000);
-		assert.equal(TicTacToe.createMask(8), 0b010_000_000);
-		assert.equal(TicTacToe.createMask(9), 0b100_000_000);
+		assert.equal(TicTacToe.createGridMask(1), 0b000_000_001);
+		assert.equal(TicTacToe.createGridMask(2), 0b000_000_010);
+		assert.equal(TicTacToe.createGridMask(3), 0b000_000_100);
+		assert.equal(TicTacToe.createGridMask(4), 0b000_001_000);
+		assert.equal(TicTacToe.createGridMask(5), 0b000_010_000);
+		assert.equal(TicTacToe.createGridMask(6), 0b000_100_000);
+		assert.equal(TicTacToe.createGridMask(7), 0b001_000_000);
+		assert.equal(TicTacToe.createGridMask(8), 0b010_000_000);
+		assert.equal(TicTacToe.createGridMask(9), 0b100_000_000);
 
-		assert.equal(TicTacToe.createMask(1, 2, 3), 0b000_000_111);
-		assert.equal(TicTacToe.createMask(4, 5, 6), 0b000_111_000);
-		assert.equal(TicTacToe.createMask(7, 8, 9), 0b111_000_000);
+		assert.equal(TicTacToe.createGridMask(1, 2, 3), 0b000_000_111);
+		assert.equal(TicTacToe.createGridMask(4, 5, 6), 0b000_111_000);
+		assert.equal(TicTacToe.createGridMask(7, 8, 9), 0b111_000_000);
 	});
 
 	it('Can get a list of positions from a bitmask', () => {
