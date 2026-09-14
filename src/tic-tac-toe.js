@@ -78,6 +78,7 @@ export class TicTacToe {
 	/**
 	 * Encoded a string representation of a player's move as an unsigned 8-bit integer.
 	 * @param {PlayerMove} str
+	 * @returns {number} The unsigned 8-bit integer representation of the given move.
 	 */
 	static encodeMove(str) {
 		if (typeof str !== 'string' || str.length !== 2)
@@ -121,6 +122,7 @@ export class TicTacToe {
 	/**
 	 * Get a bitmask for the specified positions on the grid.
 	 * @param {number[]} positions - Integers between 1 and 9 inclusive.
+	 * @returns {number} A bitmask with the specified bits turned on.
 	 */
 	static createMask(...positions) {
 		let m = 0;
