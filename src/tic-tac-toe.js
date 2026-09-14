@@ -121,7 +121,7 @@ export class TicTacToe {
 
 	/**
 	 * Get a bitmask for the specified positions on the grid.
-	 * @param {number[]} positions - Integers between 1 and 9 inclusive.
+	 * @param {GridPosition[]} positions - Integers between 1 and 9 inclusive.
 	 * @returns {number} A bitmask with the specified bits turned on.
 	 */
 	static createMask(...positions) {
@@ -197,7 +197,7 @@ export class TicTacToe {
 	}
 
 	/**
-	 * @param {number} position - Integer between 1 and 9 inclusive.
+	 * @param {GridPosition} position - Integer between 1 and 9 inclusive.
 	 */
 	isTaken(position) {
 		const mask = TicTacToe.createMask(position);
@@ -228,7 +228,7 @@ export class TicTacToe {
 			throw new Error('Unexpected game state');
 
 		const byte = TicTacToe.encodeMove(move);
-		const position = byte & 0x0F;
+		const position = /** @type {GridPosition} */(byte & 0x0F);
 		const mark = byte >> 4;
 
 		if (this.isTaken(position))
