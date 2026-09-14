@@ -4,6 +4,75 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { TicTacToe } from '../src/tic-tac-toe.js';
 
+describe('Grid positions', () => {
+	it('Creates bitmasks for specified positions', () => {
+		assert.equal(TicTacToe.createMask(1), 0b000_000_001);
+		assert.equal(TicTacToe.createMask(2), 0b000_000_010);
+		assert.equal(TicTacToe.createMask(3), 0b000_000_100);
+		assert.equal(TicTacToe.createMask(4), 0b000_001_000);
+		assert.equal(TicTacToe.createMask(5), 0b000_010_000);
+		assert.equal(TicTacToe.createMask(6), 0b000_100_000);
+		assert.equal(TicTacToe.createMask(7), 0b001_000_000);
+		assert.equal(TicTacToe.createMask(8), 0b010_000_000);
+		assert.equal(TicTacToe.createMask(9), 0b100_000_000);
+
+		assert.equal(TicTacToe.createMask(1, 2, 3), 0b000_000_111);
+		assert.equal(TicTacToe.createMask(4, 5, 6), 0b000_111_000);
+		assert.equal(TicTacToe.createMask(7, 8, 9), 0b111_000_000);
+	});
+
+	it('Can get a list of positions from a bitmask', () => {
+		assert.deepEqual(TicTacToe.getGridPositions(0b000_000_001), [1]);
+		assert.deepEqual(TicTacToe.getGridPositions(0b000_000_010), [2]);
+		assert.deepEqual(TicTacToe.getGridPositions(0b000_000_100), [3]);
+		assert.deepEqual(TicTacToe.getGridPositions(0b000_001_000), [4]);
+		assert.deepEqual(TicTacToe.getGridPositions(0b000_010_000), [5]);
+		assert.deepEqual(TicTacToe.getGridPositions(0b000_100_000), [6]);
+		assert.deepEqual(TicTacToe.getGridPositions(0b001_000_000), [7]);
+		assert.deepEqual(TicTacToe.getGridPositions(0b010_000_000), [8]);
+		assert.deepEqual(TicTacToe.getGridPositions(0b100_000_000), [9]);
+
+		assert.deepEqual(TicTacToe.getGridPositions(0b000_000_111), [1, 2, 3]);
+		assert.deepEqual(TicTacToe.getGridPositions(0b000_111_000), [4, 5, 6]);
+		assert.deepEqual(TicTacToe.getGridPositions(0b111_000_000), [7, 8, 9]);
+	});
+
+	it('Has bitmasks for all winning three-in-a-row positions', () => {
+		assert.equal(
+			TicTacToe.DIAG_1_MASK,
+			0b100_010_001,
+		);
+		assert.equal(
+			TicTacToe.DIAG_2_MASK,
+			0b001_010_100,
+		);
+		assert.equal(
+			TicTacToe.TOP_ROW_MASK,
+			0b000_000_111,
+		);
+		assert.equal(
+			TicTacToe.MIDDLE_ROW_MASK,
+			0b000_111_000,
+		);
+		assert.equal(
+			TicTacToe.BOTTOM_ROW_MASK,
+			0b111_000_000,
+		);
+		assert.equal(
+			TicTacToe.LEFT_COL_MASK,
+			0b001_001_001,
+		);
+		assert.equal(
+			TicTacToe.CENTER_COL_MASK,
+			0b010_010_010,
+		);
+		assert.equal(
+			TicTacToe.RIGHT_COL_MASK,
+			0b100_100_100,
+		);
+	});
+});
+
 describe('Player moves', () => {
 	it('Encodes', () => {
 		assert.equal(TicTacToe.encodeMove('X1'), 0x11);
