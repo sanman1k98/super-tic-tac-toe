@@ -164,14 +164,29 @@ export class TicTacToe {
 		return m;
 	}
 
-	static TOP_ROW_MASK = this.createMask(1, 2, 3);
-	static MIDDLE_ROW_MASK = this.createMask(4, 5, 6);
-	static BOTTOM_ROW_MASK = this.createMask(7, 8, 9);
-	static LEFT_COL_MASK = this.createMask(1, 4, 7);
-	static CENTER_COL_MASK = this.createMask(2, 5, 8);
-	static RIGHT_COL_MASK = this.createMask(3, 6, 9);
-	static DIAG_1_MASK = this.createMask(1, 5, 9);
-	static DIAG_2_MASK = this.createMask(3, 5, 7);
+	static TOP_ROW_MASK
+		= this.createMask(1, 2, 3);
+
+	static MIDDLE_ROW_MASK
+		= this.createMask(4, 5, 6);
+
+	static BOTTOM_ROW_MASK
+		= this.createMask(7, 8, 9);
+
+	static LEFT_COL_MASK
+		= this.createMask(1, 4, 7);
+
+	static CENTER_COL_MASK
+		= this.createMask(2, 5, 8);
+
+	static RIGHT_COL_MASK
+		= this.createMask(3, 6, 9);
+
+	static DIAG_1_MASK
+		= this.createMask(1, 5, 9);
+
+	static DIAG_2_MASK
+		= this.createMask(3, 5, 7);
 
 	/**
 	 * @param {number} marks - A player's marks represented by a bitfield.
