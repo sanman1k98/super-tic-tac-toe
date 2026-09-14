@@ -122,6 +122,26 @@ export class TicTacToe {
 	}
 
 	/**
+	 * Get all the positions set to 1 from the given grid mask.
+	 * @param {number} mask A 9-bit long bitmask
+	 * @returns {GridPosition[]} List of positions set to 1 in the given grid mask.
+	 */
+	static getGridPositions(mask) {
+		if (!Number.isInteger(mask) || mask < 0 || mask > 0x1FF)
+			throw new TypeError('InvalidGridMask: Expected integer between 0 and 511 inclusive', { cause: { value: mask } });
+
+		/** @type {GridPosition[]} */
+		const positions = [];
+
+		for (let i = 0; i < 9; i++) {
+			if ((mask >> i) & 1)
+				positions.push(/** @type {GridPosition} */(i + 1));
+		}
+
+		return positions;
+	}
+
+	/**
 	 * Get a bitmask for the specified positions on the grid.
 	 * @param {GridPosition[]} positions - Integers between 1 and 9 inclusive.
 	 * @returns {number} A bitmask with the specified bits turned on.
