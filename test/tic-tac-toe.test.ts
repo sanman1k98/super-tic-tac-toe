@@ -48,6 +48,18 @@ describe('Player moves', () => {
 		assert.equal(TicTacToe.decodeMove(0x08), 'O8');
 		assert.equal(TicTacToe.decodeMove(0x09), 'O9');
 	});
+
+	it('Throws for invalid inputs', () => {
+		assert.throws(
+			// @ts-expect-error invalid grid position
+			() => TicTacToe.encodeMove('X0'),
+			RangeError,
+		);
+		assert.throws(
+			() => TicTacToe.decodeMove(0x00),
+			Error,
+		);
+	});
 });
 
 describe('Game state', () => {
