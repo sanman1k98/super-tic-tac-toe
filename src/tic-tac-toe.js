@@ -3,16 +3,6 @@
  */
 
 /**
- * @typedef { 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 } GridPosition
- */
-
-/**
- * @typedef { `${PlayerMark}${GridPosition}` } PlayerMove
- */
-
-/**
- * Contains the moves played by both players.
- *
  * The game grid will be represented with positions corresponding to the
  * integers 1 through 9 inclusive as follows:
  *
@@ -24,13 +14,25 @@
  *  7 ┃ 8 ┃ 9
  * ```
  *
- * Each move will be represented with 5 bits, where the most significant bit
- * represents the player and the remaining 4 bits the position.
+ * @typedef { 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 } GridPosition
+ */
+
+/**
+ * All the possible moves that can be played in a game of tic-tac-toe.
  *
+ * A move can be encoded with 5 bits:
+ * - bits 0-3 for the grid position
+ * - bit 4 as a flag for the mark (X or O)
+ *
+ * Examples:
  * - X5 = 0b1_0101
  * - O9 = 0b0_1001
  * - X3 = 0b1_0011
- *
+ * @typedef {`${PlayerMark}${GridPosition}`} PlayerMove
+ */
+
+/**
+ * Encapsulates the logic and state management for a game of tic-tac-toe.
  */
 export class TicTacToe {
 	/**
@@ -70,15 +72,15 @@ export class TicTacToe {
 	}
 
 	/**
-	 * The moves played by the players serialized into bytes.
+	 * The players' moves encoded into bytes.
 	 * @type {Uint8Array}
 	 */
 	#moves = new Uint8Array(this.#buf, 4, 9);
 
 	/**
-	 * Encoded a string representation of a player's move as an unsigned 8-bit integer.
+	 * Encode a player's move into a byte.
 	 * @param {PlayerMove} str
-	 * @returns {number} The unsigned 8-bit integer representation of the given move.
+	 * @returns {number} The byte value as an unsigned 8-bit integer.
 	 */
 	static encodeMove(str) {
 		if (typeof str !== 'string' || str.length !== 2)
@@ -98,9 +100,9 @@ export class TicTacToe {
 	}
 
 	/**
-	 * Take an unsigned 8-bit integer and get back the player move that it represents.
-	 * @param {number} uint8
-	 * @returns {PlayerMove} The move decoded from the given data.
+	 * Decode a player move from a byte.
+	 * @param {number} uint8 The byte value as an unsigned 8-bit integer.
+	 * @returns {PlayerMove} The decoded player move.
 	 */
 	static decodeMove(uint8) {
 		if (!Number.isInteger(uint8))
