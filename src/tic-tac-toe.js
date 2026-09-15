@@ -241,9 +241,11 @@ export class TicTacToe {
 	}
 
 	/**
+	 * Check if the given grid position has been marked by either an X or O.
 	 * @param {GridPosition} position - Integer between 1 and 9 inclusive.
+	 * @returns {boolean} True if marked, false if unmarked.
 	 */
-	isTaken(position) {
+	isMarked(position) {
 		const mask = TicTacToe.createGridMask(position);
 		return ((this.#xMarks | this.#oMarks) & mask) !== 0;
 	}
@@ -281,7 +283,7 @@ export class TicTacToe {
 		const position = /** @type {GridPosition} */(byte & 0x0F);
 		const mark = byte >> 4;
 
-		if (this.isTaken(position))
+		if (this.isMarked(position))
 			throw new Error('Position is already taken');
 
 		const mask = TicTacToe.createGridMask(position);

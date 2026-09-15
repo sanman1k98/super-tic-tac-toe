@@ -136,28 +136,28 @@ describe('Game state', () => {
 		const game = new TicTacToe();
 		game.play('X5');
 
-		assert(!game.isTaken(1));
-		assert(!game.isTaken(2));
-		assert(!game.isTaken(3));
-		assert(!game.isTaken(4));
-		assert(!game.isTaken(6));
-		assert(!game.isTaken(7));
-		assert(!game.isTaken(8));
-		assert(!game.isTaken(9));
+		assert(!game.isMarked(1));
+		assert(!game.isMarked(2));
+		assert(!game.isMarked(3));
+		assert(!game.isMarked(4));
+		assert(!game.isMarked(6));
+		assert(!game.isMarked(7));
+		assert(!game.isMarked(8));
+		assert(!game.isMarked(9));
 
-		assert(game.isTaken(5));
+		assert(game.isMarked(5));
 
 		game.play('O9');
 
-		assert(!game.isTaken(1));
-		assert(!game.isTaken(2));
-		assert(!game.isTaken(3));
-		assert(!game.isTaken(4));
-		assert(!game.isTaken(6));
-		assert(!game.isTaken(7));
-		assert(!game.isTaken(8));
+		assert(!game.isMarked(1));
+		assert(!game.isMarked(2));
+		assert(!game.isMarked(3));
+		assert(!game.isMarked(4));
+		assert(!game.isMarked(6));
+		assert(!game.isMarked(7));
+		assert(!game.isMarked(8));
 
-		assert(game.isTaken(5));
-		assert(game.isTaken(9));
+		assert(game.isMarked(5));
+		assert(game.isMarked(9));
 	});
 });
