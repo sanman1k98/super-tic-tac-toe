@@ -272,28 +272,33 @@ export class TicTacToe {
 	}
 
 	/**
+	 * Plays the given move in the game and updates the state. Returns a grid
+	 * mask of the winning three-in-a-row marks or 0.
 	 * @param {PlayerMove} move
+	 * @returns {number} Will be zero if there are no marks three-in-a-row.
 	 */
 	play(move) {
-		const idx = this.#moves.findLastIndex(Boolean) + 1;
-		if (idx >= this.#moves.length)
-			throw new Error('Unexpected game state');
+		if (this.finished)
+			throw new Error('Game is finished');
 
 		const byte = TicTacToe.encodeMove(move);
 		const position = /** @type {GridPosition} */(byte & 0x0F);
-		const mark = byte >> 4;
 
 		if (this.isMarked(position))
-			throw new Error('Position is already taken');
+			throw new Error('Position is already marked');
 
+		const currentMove = this.#moves.findLastIndex(Boolean) + 1;
 		const mask = TicTacToe.createGridMask(position);
+		const isX = (byte >> 4) === 1;
 
-		if (mark === 1) {
-			this.#moves.set([byte], idx);
+		if (isX)
 			this.#xMarks |= mask;
-		} else if (mark === 0) {
-			this.#moves.set([byte], idx);
+		else
 			this.#oMarks |= mask;
-		}
+
+		this.#moves.set([byte], currentMove);
+		return TicTacToe.getWinningGridMask(
+			isX ? this.#xMarks : this.#oMarks,
+		);
 	}
 }
