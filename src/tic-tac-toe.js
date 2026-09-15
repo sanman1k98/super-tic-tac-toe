@@ -255,6 +255,10 @@ export class TicTacToe {
 		return Array.from(this.#moves.filter(Boolean), TicTacToe.decodeMove);
 	}
 
+	/**
+	 * Will be `true` when either all positions are marked or there is a winner.
+	 * @type {boolean}
+	 */
 	get finished() {
 		if (this.#moves.findLastIndex(Boolean) === this.#moves.length - 1)
 			return true;
