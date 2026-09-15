@@ -209,28 +209,35 @@ export class TicTacToe {
 		= this.createGridMask(3, 5, 7);
 
 	/**
-	 * @param {number} marks - A player's marks represented by a bitfield.
+	 * Get a grid mask of the marks that are three-in-a-row.
+	 * @param {number} marks A player's marks represented by a bitfield.
+	 * @returns {number} Zero if there are no marks that are three-in-a-row.
 	 */
-	static getWinningMarks(marks) {
-		marks = ~marks;
+	static getWinningGridMask(marks) {
+		if (!Number.isInteger(marks) || marks < 0 || marks > 0x1FF)
+			throw new TypeError('InvalidGridMask: Expected an integer between 0 and 0x1FF inclusive', { cause: { value: marks } });
 
-		if ((marks & this.DIAG_1_MASK) === 0)
-			return this.DIAG_1_MASK;
-		else if ((marks & this.DIAG_2_MASK) === 0)
-			return this.DIAG_2_MASK;
-		else if ((marks & this.TOP_ROW_MASK) === 0)
-			return this.TOP_ROW_MASK;
-		else if ((marks & this.MIDDLE_ROW_MASK) === 0)
-			return this.MIDDLE_ROW_MASK;
-		else if ((marks & this.BOTTOM_ROW_MASK) === 0)
-			return this.BOTTOM_ROW_MASK;
-		else if ((marks & this.LEFT_COL_MASK) === 0)
-			return this.LEFT_COL_MASK;
-		else if ((marks & this.CENTER_COL_MASK) === 0)
-			return this.CENTER_COL_MASK;
-		else if ((marks & this.RIGHT_COL_MASK) === 0)
-			return this.RIGHT_COL_MASK;
-		return 0;
+		const unmarked = ~marks;
+		let mask = 0;
+
+		if ((unmarked & this.DIAG_1_MASK) === 0)
+			mask |= this.DIAG_1_MASK;
+		if ((unmarked & this.DIAG_2_MASK) === 0)
+			mask |= this.DIAG_2_MASK;
+		if ((unmarked & this.TOP_ROW_MASK) === 0)
+			mask |= this.TOP_ROW_MASK;
+		if ((unmarked & this.MIDDLE_ROW_MASK) === 0)
+			mask |= this.MIDDLE_ROW_MASK;
+		if ((unmarked & this.BOTTOM_ROW_MASK) === 0)
+			mask |= this.BOTTOM_ROW_MASK;
+		if ((unmarked & this.LEFT_COL_MASK) === 0)
+			mask |= this.LEFT_COL_MASK;
+		if ((unmarked & this.CENTER_COL_MASK) === 0)
+			mask |= this.CENTER_COL_MASK;
+		if ((unmarked & this.RIGHT_COL_MASK) === 0)
+			mask |= this.RIGHT_COL_MASK;
+
+		return mask;
 	}
 
 	/**
@@ -251,7 +258,7 @@ export class TicTacToe {
 	get finished() {
 		if (this.#moves.findLastIndex(Boolean) === this.#moves.length - 1)
 			return true;
-		else if (TicTacToe.getWinningMarks(this.#xMarks) || TicTacToe.getWinningMarks(this.#oMarks))
+		else if (TicTacToe.getWinningGridMask(this.#xMarks) || TicTacToe.getWinningGridMask(this.#oMarks))
 			return true;
 		return false;
 	}
