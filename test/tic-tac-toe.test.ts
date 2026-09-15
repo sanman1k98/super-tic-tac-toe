@@ -1,5 +1,6 @@
 /* eslint-disable test/no-import-node-test */
 
+import type { PlayerMove } from '../src/tic-tac-toe.js';
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { TicTacToe } from '../src/tic-tac-toe.js';
@@ -159,5 +160,20 @@ describe('Game state', () => {
 
 		assert(game.isMarked(5));
 		assert(game.isMarked(9));
+	});
+
+	it('Will return a grid mask after every move played', () => {
+		const game = new TicTacToe();
+		const moves: PlayerMove[] = ['X1', 'X2', 'X3'];
+
+		for (const move of moves) {
+			const mask = game.play(move);
+			if (move === 'X3')
+				assert.equal(mask, TicTacToe.TOP_ROW_MASK);
+			else
+				assert.equal(mask, 0);
+		}
+
+		assert(game.finished);
 	});
 });
