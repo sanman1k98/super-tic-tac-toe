@@ -39,20 +39,20 @@ export class TicTacToe {
 	 * Backing buffer used to store all data for this game.
 	 * @type {ArrayBuffer}
 	 */
-	#buf = new ArrayBuffer(2 + 2 + 9);
+	#buf = new ArrayBuffer(3 + 9);
 
 	/**
 	 * Used to manipulate bytes within the array buffer.
 	 * @type {DataView}
 	 */
-	#view = new DataView(this.#buf);
+	#view = new DataView(this.#buf, 0, 3);
 
 	/**
 	 * Bitset used to represent the current positions occupied by X.
 	 * @type {number}
 	 */
 	get #xMarks() {
-		return this.#view.getUint16(0);
+		return this.#view.getUint16(0) >>> 7;
 	}
 
 	/**
@@ -60,22 +60,26 @@ export class TicTacToe {
 	 * @type {number}
 	 */
 	get #oMarks() {
-		return this.#view.getUint16(2);
+		return this.#view.getUint16(1) & 0x1FF;
 	}
 
-	set #xMarks(uint16) {
-		this.#view.setUint16(0, uint16);
+	set #xMarks(bits) {
+		bits <<= 7;
+		bits |= this.#view.getUint8(1) & 0x7F;
+		this.#view.setUint16(0, bits);
 	}
 
-	set #oMarks(uint16) {
-		this.#view.setUint16(2, uint16);
+	set #oMarks(bits) {
+		const byte = this.#view.getUint8(1) & 0xFE;
+		bits |= byte << 8;
+		this.#view.setUint16(1, bits);
 	}
 
 	/**
 	 * The players' moves encoded into bytes.
 	 * @type {Uint8Array}
 	 */
-	#moves = new Uint8Array(this.#buf, 4, 9);
+	#moves = new Uint8Array(this.#buf, 3, 9);
 
 	/**
 	 * Encode a player's move into a byte.
