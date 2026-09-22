@@ -76,6 +76,38 @@ export class TicTacToe {
 	}
 
 	/**
+	 * The index of the `TicTacToe.prototype.#moves` array to store the next move.
+	 * @type {number}
+	 */
+	get #movesIdx() {
+		return (this.#view.getUint8(1) & 0b0001_1110) >>> 1;
+	}
+
+	set #movesIdx(bits) {
+		bits <<= 1;
+		bits |= this.#view.getUint8(1) & ~0b0001_1110;
+		this.#view.setUint8(1, bits);
+	}
+
+	/**
+	 * The final state of the game represented with two bits:
+	 * - 3 means a draw
+	 * - 2 means X winner
+	 * - 1 means O winner
+	 * - 0 means the game is ongoing
+	 * @type {0 | 1 | 2 | 3}
+	 */
+	get #final() {
+		return /** @type {0 | 1 | 2 | 3} */((this.#view.getUint8(1) & 0b0110_0000) >>> 5);
+	}
+
+	set #final(bits) {
+		bits <<= 5;
+		bits |= this.#view.getUint8(1) & ~0b0110_0000;
+		this.#view.setUint8(1, bits);
+	}
+
+	/**
 	 * The players' moves encoded into bytes.
 	 * @type {Uint8Array}
 	 */
@@ -282,7 +314,7 @@ export class TicTacToe {
 	 * @returns {number} Will be zero if there are no marks three-in-a-row.
 	 */
 	play(move) {
-		if (this.finished)
+		if (this.#final)
 			throw new Error('Game is finished');
 
 		const byte = TicTacToe.encodeMove(move);
@@ -291,7 +323,6 @@ export class TicTacToe {
 		if (this.isMarked(position))
 			throw new Error('Position is already marked');
 
-		const currentMove = this.#moves.findLastIndex(Boolean) + 1;
 		const mask = TicTacToe.createGridMask(position);
 		const isX = (byte >> 4) === 1;
 
@@ -300,9 +331,17 @@ export class TicTacToe {
 		else
 			this.#oMarks |= mask;
 
-		this.#moves.set([byte], currentMove);
-		return TicTacToe.getWinningGridMask(
+		this.#moves.set([byte], this.#movesIdx++);
+		const winningMask = TicTacToe.getWinningGridMask(
 			isX ? this.#xMarks : this.#oMarks,
 		);
+
+		if (winningMask !== 0) {
+			this.#final = isX ? 2 : 1;
+		} else if (this.#movesIdx > 8) {
+			this.#final = 3;
+		}
+
+		return winningMask;
 	}
 }
