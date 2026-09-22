@@ -298,13 +298,7 @@ export class TicTacToe {
 	 * @type {boolean}
 	 */
 	get finished() {
-		const moveCount = this.#moves.findLastIndex(Boolean) + 1;
-		if (moveCount < 3)
-			return false;
-		else if (moveCount === this.#moves.length)
-			return true;
-		else
-			return Boolean(TicTacToe.getWinningGridMask(this.#xMarks) || TicTacToe.getWinningGridMask(this.#oMarks));
+		return this.#final !== 0;
 	}
 
 	/**
